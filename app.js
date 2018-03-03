@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var campaigns = require('./routes/api/campaigns');
 var pendingCampaigns = require('./routes/api/pendingCampaigns');
 var userInfo = require('./routes/api/userInfo');
+var myCampaigns = require('./routes/api/myCampaigns');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use('/', index);
 app.use('/api/campaigns', campaigns);
 app.use('/api/userInfo', userInfo);
 app.use('/api/pendingCampaigns', pendingCampaigns);
+app.use('/api/myCampaigns', myCampaigns);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
