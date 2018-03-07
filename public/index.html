@@ -2,16 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="/jquery/jquery.js"></script>
-    <script src="/tether/js/tether.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <title>RIT Fundraising</title>
     <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+    <link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css" />
+    <link rel="import" href="/dashboard.html">
 </head>
 <body>
 <div class="container-fluid">
-    <h1>My First Bootstrap Page</h1>
-    <p>This is some text.</p>
+    <div class="row">
+        <nav class="col-md-2 bg-light sidebar">
+            <div class="sidebar-sticky">
+                <div class="user-pic">
+                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fa fa-home" aria-hidden="true" style=""></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-address-card-o" aria-hidden="true" style=""></i>
+                            Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-money" aria-hidden="true" style=""></i>
+                            Balance: $XXXX
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-bars" aria-hidden="true" style=""></i>
+                            My Campaigns
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content">
+            <h1 class="title">RIT Fundraising</h1>
+            <my-dashboard>
+            </my-dashboard>
+        </div>
+        <div class="addCampaignButton"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+    </div>
 </div>
+<script src="/jquery/jquery.js"></script>
+<script src="/tether/js/tether.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
