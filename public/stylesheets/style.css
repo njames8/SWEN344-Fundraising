@@ -85,6 +85,11 @@ a {
     padding-left: 10px;
 }
 
+.campaignImage img {
+    border-radius: 25px;
+    width: 100%;
+}
+
 .campaignGoalAmount {
     padding-top: 2rem;
 }
