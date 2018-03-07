@@ -1,17 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var campaigns = require('./routes/api/campaigns');
-var pendingCampaigns = require('./routes/api/pendingCampaigns');
-var userInfo = require('./routes/api/userInfo');
-var myCampaigns = require('./routes/api/myCampaigns');
+let index = require('./routes/index');
+let campaigns = require('./routes/api/campaigns');
+let pendingCampaigns = require('./routes/api/pendingCampaigns');
+let userInfo = require('./routes/api/userInfo');
+let myCampaigns = require('./routes/api/myCampaigns');
 
-var app = express();
+let app = express();
 
 // view engine setup
 app.set('view engine', 'ejs');
@@ -37,7 +37,7 @@ app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
