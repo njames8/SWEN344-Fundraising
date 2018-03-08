@@ -1,0 +1,99 @@
+<template id="account-template">
+    <div class="container">
+        <div class="jumbotron">
+            <form id="updateAccountInfoForm">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="email" class="form-control" id="accountName" value="Name">
+                </div>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" class="form-control" id="accountEmail" value="Email">
+                </div>
+                <div class="form-group">
+                    <label>Account Balance</label>
+                    <input class="form-control" id="accountBalance" type="text" placeholder="XXXX" readonly>
+                </div>
+                <button type="button" class="btn btn-primary" id="addFundsButton">Add Funds</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</template>
+
+<script>
+    var importedDoc = document.currentScript.ownerDocument;
+    class Account extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            var that = this;
+            fetch(`/api/userInfo`)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    that.updateAccount(JSON.parse(responseText));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        addFundsCall(event) {
+            // stubbed functionality
+            console.log("Added Funds");
+            $("#addFundsModal").modal("hide");
+        }
+
+        updateAccountInfoCall(event) {
+            // stubbed functionality
+            console.log("Account information updated");
+        }
+
+        changeCurrencyIcon(event) {
+            const currencyIcon = document.querySelector(".currencyOptionIcon i");
+            currencyIcon.className = "fa fa-" + this.dataset.type;
+            $(this.parentElement.children).removeClass("active");
+            $(this).addClass("active");
+        }
+
+        createModal(self) {
+            const t = importedDocument.querySelector('#add-funds-template');
+            const instance = t.content.cloneNode(true);
+            document.querySelector("add-funds-modal").appendChild(instance);
+            $("#addFundsModal").modal();
+
+            // Currency Dropdown options
+            const currencyDropdown = document.querySelectorAll(".currencyOptions a");
+            currencyDropdown.forEach((currencyOption) =>
+                currencyOption.addEventListener("click", self.changeCurrencyIcon)
+            );
+
+            const addFundsForm = document.querySelector("#addFundsForm");
+            addFundsForm.addEventListener("submit", self.addFundsCall);
+        }
+
+        updateAccount(response) {
+            var self = this;
+
+            const t = importedDoc.querySelector('#account-template');
+            const instance = t.content.cloneNode(true);
+            this.appendChild(instance);
+
+            const button =  document.querySelector("#addFundsButton");
+            button.addEventListener('click',function(){
+                self.createModal(self);
+            }, false);
+
+            const updateAccountInfoForm = document.querySelector("#updateAccountInfoForm");
+            updateAccountInfoForm.addEventListener("submit", self.updateAccountInfoCall);
+
+            // Set form values
+            $("my-account #accountName").attr('value', response.name);
+            $("my-account #accountEmail").attr('value', response.email);
+            $("my-account #accountBalance").attr('placeholder',response.balance);
+        }
+    }
+    customElements.define('my-account', Account);
+</script>

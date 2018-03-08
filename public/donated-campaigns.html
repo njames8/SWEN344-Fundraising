@@ -1,0 +1,53 @@
+<template id="donated-campaigns-template">
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Campaign Name</th>
+                <th scope="col">Contribution Amount</th>
+            </tr>
+            </thead>
+            <tbody id="myContributionTable">
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    var importedDoc = document.currentScript.ownerDocument;
+    class DonatedCampaigns extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            var that = this;
+            fetch(`/api/myContributions`)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    that.updateAccount(JSON.parse(responseText));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        updateAccount(response) {
+            var self = this;
+
+            const t = importedDoc.querySelector('#donated-campaigns-template');
+            const instance = t.content.cloneNode(true);
+            this.appendChild(instance);
+
+            const table = this.querySelector("#myContributionTable");
+            for (var contribution of response) {
+                var row = table.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.innerHTML = contribution.name;
+                cell2.innerHTML = contribution.amount;
+            }
+        }
+    }
+    customElements.define('my-donated-campaigns', DonatedCampaigns);
+</script>
