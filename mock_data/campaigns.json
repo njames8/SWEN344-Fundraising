@@ -7,6 +7,8 @@
     "description": "Give me money so I can get Superfreak-y.",
     "goal" : 10000.00,
     "total" : 1.25,
+    "startDate": "2018-03-09",
+    "endDate": "2018-04-20",
     "contributors" : [
       {
         "id" : 1,
@@ -29,6 +31,8 @@
     "description": "I only want to have some money in the purple rain.",
     "goal": 2500.25,
     "total": 601.78,
+    "startDate": "2018-03-12",
+    "endDate": "2018-04-30",
     "contributors": [
       {
         "id" : 1,
