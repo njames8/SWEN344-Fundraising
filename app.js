@@ -11,6 +11,8 @@ let campaigns = require('./routes/api/campaigns');
 let pendingCampaigns = require('./routes/api/pendingCampaigns');
 let userInfo = require('./routes/api/userInfo');
 let myCampaigns = require('./routes/api/myCampaigns');
+let myContributions = require('./routes/api/myContributions');
+let createCampaign = require('./routes/api/createCampaign');
 
 let app = express();
 
@@ -31,6 +33,8 @@ app.use('/api/campaigns', campaigns);
 app.use('/api/userInfo', userInfo);
 app.use('/api/pendingCampaigns', pendingCampaigns);
 app.use('/api/myCampaigns', myCampaigns);
+app.use('/api/myContributions', myContributions);
+app.use('/api/createCampaign', createCampaign);
 
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
