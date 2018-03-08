@@ -9,43 +9,12 @@
     <link rel="stylesheet" type="text/css" href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
     <link rel="import" href="/dashboard.html">
     <link rel="import" href="/create-campaign-modal.html">
+    <link rel="import" href="/sidebar.html">
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 sidebar">
-            <div class="sidebar-sticky">
-                <div class="user-pic">
-                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fa fa-home" aria-hidden="true" style=""></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-address-card-o" aria-hidden="true" style=""></i>
-                            Account
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-money" aria-hidden="true" style=""></i>
-                            Balance: $XXXX
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-bars" aria-hidden="true" style=""></i>
-                            My Campaigns
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <my-sidebar></my-sidebar>
         <div class="content">
             <h1 class="title">RIT Fundraising</h1>
             <my-dashboard>

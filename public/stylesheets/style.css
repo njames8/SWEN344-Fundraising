@@ -11,6 +11,7 @@ a {
 }
 
 .sidebar {
+    height: 100%;
     flex: 1;
     font-size: 20px;
     z-index: 100;

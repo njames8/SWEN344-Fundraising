@@ -1,0 +1,65 @@
+<template id="sidebar-template">
+    <nav class="sidebar">
+        <div class="sidebar-sticky">
+            <div class="user-pic">
+                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fa fa-home" aria-hidden="true" style=""></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-address-card-o" aria-hidden="true" style=""></i>
+                        Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="fa fa-money" aria-hidden="true" style=""></i>
+                        <span id="accountBalance">Balance: $XXXX</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-bars" aria-hidden="true" style=""></i>
+                        My Campaigns
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</template>
+
+<script>
+    var doc = document.currentScript.ownerDocument;
+    class Sidebar extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            var that = this;
+            fetch(`/api/userInfo`)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    that.updateBalance(JSON.parse(responseText));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        updateBalance(response) {
+            const t = doc.querySelector('#sidebar-template');
+            const instance = t.content.cloneNode(true);
+            this.appendChild(instance);
+
+            this.querySelector("#accountBalance").innerHTML = "Balance: $" + response.balance;
+        }
+    }
+    customElements.define('my-sidebar', Sidebar);
+</script>
