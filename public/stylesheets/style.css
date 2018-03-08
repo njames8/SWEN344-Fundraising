@@ -58,7 +58,7 @@ a {
     flex: 1;
 }
 
-.addCampaignButton {
+#createCampaignButton {
     position: absolute;
     right: 25px;
     bottom: 20px;
@@ -103,4 +103,12 @@ a {
     height: 30px;
     width: 40px;
     border-radius: 15px;
+}
+
+/*
+    Add Campaign
+ */
+
+#addCampaignForm {
+    font-size: 18px;
 }

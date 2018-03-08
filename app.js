@@ -33,7 +33,9 @@ app.use('/api/myCampaigns', myCampaigns);
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/tether', express.static(__dirname + '/node_modules/tether/dist/'));
+app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist/umd'));
 app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/'));
+app.use('/bootstrap-datepicker', express.static(__dirname + '/node_modules/bootstrap-datepicker/dist'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,111 @@
+<template id="create-campaign-template">
+    <div class="modal fade" id="createCampaignModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Campaign</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addCampaignForm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-control-label">Title</label>
+                            <input type="text" class="form-control" id="campaign-title">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Description</label>
+                            <textarea class="form-control" id="campaign-description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Goal Amount</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" min="0" step="0.01" aria-label="Text input with segmented dropdown button">
+                                <div class="input-group-append">
+                                    <div class="input-group-text currencyOptionIcon"><i class="fa fa-usd" aria-hidden="true"></i></div>
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu currencyOptions">
+                                        <a class="dropdown-item" id="usdOption" data-type="usd" href="#">USD</a>
+                                        <a class="dropdown-item" id="eurOption" data-type="eur" href="#">Euro</a>
+                                        <a class="dropdown-item" id="gpbOption" data-type="gbp" href="#">GBP</a>
+                                        <a class="dropdown-item" id="inrOption" data-type="inr" href="#">INR</a>
+                                        <a class="dropdown-item" id="cadOption" data-type="usd" href="#">CAD</a>
+                                        <a class="dropdown-item" id="btcOption" data-type="btc" href="#">BTC</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Dates</label>
+                            <div class="input-group input-daterange">
+                                <input type="text" class="form-control" id="campaign-start-date">
+                                <div class="input-group-text">to</div>
+                                <input type="text" class="form-control" id="campaign-end-date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add Campaign</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    var importedDocument = document.currentScript.ownerDocument;
+    class CreateCampaignModal extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            const button =  document.querySelector("#createCampaignButton");
+            //button.addEventListener("click", this.createModal);
+
+            var self = this;
+            button.addEventListener('click',function(){
+                self.createModal(self);
+            }, false);
+        }
+
+        addCampaignCall() {
+            // Stubbed functionality
+            console.log("Added Campaign");
+            $("#createCampaignModal").modal("hide");
+        }
+
+        changeCurrencyIcon(event) {
+            const currencyIcon = document.querySelector(".currencyOptionIcon i");
+            currencyIcon.className = "fa fa-" + this.dataset.type;
+            $(this.parentElement.children).removeClass("active");
+            $(this).addClass("active");
+        }
+
+        createModal(self) {
+            const t = importedDocument.querySelector('#create-campaign-template');
+            const instance = t.content.cloneNode(true);
+            document.querySelector("create-campaign-modal").appendChild(instance);
+            $("#createCampaignModal").modal();
+
+            // Currency Dropdown options
+            const currencyDropdown = document.querySelectorAll(".currencyOptions a");
+            currencyDropdown.forEach((currencyOption) =>
+                currencyOption.addEventListener("click", self.changeCurrencyIcon)
+            );
+
+            // Datepickers
+            $('#campaign-start-date').datepicker({});
+            $('#campaign-end-date').datepicker({});
+
+            const addCampaignForm = document.querySelector("#addCampaignForm");
+            addCampaignForm.addEventListener("submit", self.addCampaignCall);
+        }
+    }
+    customElements.define('create-campaign-modal', CreateCampaignModal);
+</script>
