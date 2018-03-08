@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --exit",
+    "coverage" : "nyc mocha test"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -21,6 +22,7 @@
     "mocha": "^5.0.3",
     "morgan": "~1.9.0",
     "popper.js": "^1.13.0",
+    "nyc": "^11.4.1",
     "serve-favicon": "~2.4.5",
     "tether": "^1.4.3"
   }
