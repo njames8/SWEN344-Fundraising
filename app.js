@@ -6,6 +6,7 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 
 let index = require('./routes/index');
+let account = require('./routes/account');
 let campaigns = require('./routes/api/campaigns');
 let pendingCampaigns = require('./routes/api/pendingCampaigns');
 let userInfo = require('./routes/api/userInfo');
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/account', account);
 app.use('/api/campaigns', campaigns);
 app.use('/api/userInfo', userInfo);
 app.use('/api/pendingCampaigns', pendingCampaigns);
