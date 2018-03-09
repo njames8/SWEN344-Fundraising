@@ -14,6 +14,8 @@ let userInfo = require('./routes/api/userInfo');
 let myCampaigns = require('./routes/api/myCampaigns');
 let myContributions = require('./routes/api/myContributions');
 let createCampaign = require('./routes/api/createCampaign');
+let terminateCampaign = require('./routes/api/terminateCampaign');
+let cancelCampaign = require('./routes/api/cancelCampaign');
 
 let app = express();
 
@@ -37,6 +39,8 @@ app.use('/api/pendingCampaigns', pendingCampaigns);
 app.use('/api/myCampaigns', myCampaigns);
 app.use('/api/myContributions', myContributions);
 app.use('/api/createCampaign', createCampaign);
+app.use('/api/terminateCampaign', terminateCampaign);
+app.use('/api/cancelCampaign', cancelCampaign);
 
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));

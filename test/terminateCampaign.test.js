@@ -8,12 +8,12 @@ chai.use(require('chai-http'));
 const server = http.createServer(app);
 const request = chai.request(server);
 
-describe("GET Create Campaign", function () {
+describe("GET Terminate Campaign", function () {
     after(done => server.close(done));
     this.timeout(5000);
     it("should return the mock data", function () {
         return request
-            .get('/api/createCampaign')
+            .get('/api/terminateCampaign')
             .then((res) => {
                 expect(res).to.have.status(200);
             });
