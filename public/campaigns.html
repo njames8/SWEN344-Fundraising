@@ -1,36 +1,38 @@
-<template id="account-template">
-    <div class="container">
-        <div class="jumbotron">
-            <form id="updateAccountInfoForm">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="email" class="form-control" id="accountName" value="Name">
+<template id="my-campaign-template">
+    <div class="campaign">
+        <div class="card-block campaign-block">
+            <div class="row">
+                <div class="col-3 campaignImage">
+                    <img src="" height="120px">
                 </div>
-                <div class="form-group">
-                    <label>Email address</label>
-                    <input type="email" class="form-control" id="accountEmail" value="Email">
+                <div class="col-5 campaignInfo">
+                    <h3 class="card-title campaignTitle"></h3>
+                    <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
+                    <p class="card-text campaignDescription"></p>
                 </div>
-                <div class="form-group">
-                    <label>Account Balance</label>
-                    <input class="form-control" id="accountBalance" type="text" placeholder="XXXX" readonly>
+                <div class="col-3 campaignGoal">
+                    <button class="btn btn-primary" id="cancelCampaign">Cancel</button>
+                    <button class="btn btn-primary" id="terminateCampaign">Terminate</button>
+                    <h5 class="card-title campaignGoalAmount" id="myCampaignGoalAmount"></h5>
+                    <div class="campaignGoalBar">
+                        <div class="progress-bar"></div>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-primary" id="addFundsButton">Add Funds</button>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    var importedDoc = document.currentScript.ownerDocument;
-    class Account extends HTMLElement {
+    var importedDocument = document.currentScript.ownerDocument;
+    class Campaigns extends HTMLElement {
         constructor() {
             super();
         }
 
         connectedCallback() {
             var that = this;
-            fetch(`/api/userInfo`)
+            fetch(`/api/myCampaigns`)
                 .then((response) => response.text())
                 .then((responseText) => {
                     that.updateAccount(JSON.parse(responseText));
@@ -40,60 +42,57 @@
                 });
         }
 
-        addFundsCall(event) {
-            // stubbed functionality
-            console.log("Added Funds");
-            $("#addFundsModal").modal("hide");
+        cancelCampaignCall(event) {
+            // stubbed out cancel campaign call
+
+            fetch(`/api/cancelCampaigns`)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    console.log("cancelled campaign");
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
 
-        updateAccountInfoCall(event) {
-            // stubbed functionality
-            console.log("Account information updated");
-        }
-
-        changeCurrencyIcon(event) {
-            const currencyIcon = document.querySelector(".currencyOptionIcon i");
-            currencyIcon.className = "fa fa-" + this.dataset.type;
-            $(this.parentElement.children).removeClass("active");
-            $(this).addClass("active");
-        }
-
-        createModal(self) {
-            const t = importedDocument.querySelector('#add-funds-template');
-            const instance = t.content.cloneNode(true);
-            document.querySelector("add-funds-modal").appendChild(instance);
-            $("#addFundsModal").modal();
-
-            // Currency Dropdown options
-            const currencyDropdown = document.querySelectorAll(".currencyOptions a");
-            currencyDropdown.forEach((currencyOption) =>
-                currencyOption.addEventListener("click", self.changeCurrencyIcon)
-            );
-
-            const addFundsForm = document.querySelector("#addFundsForm");
-            addFundsForm.addEventListener("submit", self.addFundsCall);
+        terminateCampaignCall(event) {
+            // stubbed out cancel campagin call
+            console.log("terminate campagin");
+            fetch(`/api/terminateCampaigns`)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    console.log("cancelled campaign");
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
 
         updateAccount(response) {
             var self = this;
+            for (var campaign of response) {
+                const t = importedDocument.querySelector('#my-campaign-template');
+                const instance = t.content.cloneNode(true);
 
-            const t = importedDoc.querySelector('#account-template');
-            const instance = t.content.cloneNode(true);
-            this.appendChild(instance);
+                instance.querySelector(".campaignImage img").src = campaign.image;
+                instance.querySelector(".campaignTitle").innerHTML = campaign.title;
+                instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
+                instance.querySelector(".campaignDescription").innerHTML = campaign.description;
+                instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
 
-            const button =  document.querySelector("#addFundsButton");
-            button.addEventListener('click',function(){
-                self.createModal(self);
-            }, false);
+                var percentage = (campaign.total / campaign.goal) * 100 + "%";
 
-            const updateAccountInfoForm = document.querySelector("#updateAccountInfoForm");
-            updateAccountInfoForm.addEventListener("submit", self.updateAccountInfoCall);
+                instance.querySelector(".campaignGoalBar .progress-bar").style.width = percentage;
 
-            // Set form values
-            $("my-account #accountName").attr('value', response.name);
-            $("my-account #accountEmail").attr('value', response.email);
-            $("my-account #accountBalance").attr('placeholder',response.balance);
+                const cancelCampaignButton = instance.querySelector("#cancelCampaign");
+                const terminateCampaignButton = instance.querySelector("#terminateCampaign");
+
+                cancelCampaignButton.addEventListener("click", self.cancelCampaignCall);
+                terminateCampaignButton.addEventListener("click", self.terminateCampaignCall);
+
+                this.appendChild(instance);
+            }
         }
     }
-    customElements.define('my-account', Account);
+    customElements.define('my-campaigns', Campaigns);
 </script>

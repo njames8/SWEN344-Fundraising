@@ -95,6 +95,10 @@ a {
     padding-top: 2rem;
 }
 
+#myCampaignGoalAmount {
+    padding-top: 10px;
+}
+
 .campaignGoalBar {
     background-color: lightslategray;
     border-radius: 15px;
