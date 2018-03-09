@@ -45,7 +45,7 @@
         cancelCampaignCall(event) {
             // stubbed out cancel campaign call
 
-            fetch(`/api/cancelCampaigns`)
+            fetch(`/api/cancelCampaign`)
                 .then((response) => response.text())
                 .then((responseText) => {
                     console.log("cancelled campaign");
@@ -58,7 +58,7 @@
         terminateCampaignCall(event) {
             // stubbed out cancel campagin call
             console.log("terminate campagin");
-            fetch(`/api/terminateCampaigns`)
+            fetch(`/api/terminateCampaign`)
                 .then((response) => response.text())
                 .then((responseText) => {
                     console.log("cancelled campaign");
