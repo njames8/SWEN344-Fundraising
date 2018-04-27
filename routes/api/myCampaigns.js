@@ -7,7 +7,10 @@ router.get('/', function(req, res, next) {
     let userId = req.body.userId;
     if (userId !== null) {
         let db = new sqlite.Database("../../database/fundraising.db");
-        db.all("SELECT * FROM campaign WHERE owner_id = $userId", userId, function (err, rows) {
+        db.all("SELECT * FROM campaign WHERE owner_id = ?", userId, function (err, rows) {
+            if (err) {
+                console.error(err);
+            }
             res.json(rows);
         });
     } else {

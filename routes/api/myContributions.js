@@ -8,8 +8,13 @@ router.get('/', function(req, res, next) {
         const db = new sqlite.Database("../../database/fundraising.db");
         db.all("SELECT cp.*, cc.contribution FROM campaign_contributor cc " +
             "INNER JOIN campaign cp ON cc.campaign_id = cp.campaign_id " +
-            "WHERE cc.user_id = $userId", userId, function(err, rows) {
-            res.json(rows);
+            "WHERE cc.user_id = ?",
+            userId,
+            function(err, rows) {
+                if (err) {
+                    console.error(err);
+                }
+                res.json(rows);
         });
     } else {
         res.sendStatus(400);

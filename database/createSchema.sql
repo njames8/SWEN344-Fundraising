@@ -14,8 +14,8 @@ CREATE TABLE campaign (
     description TEXT,
     goal        REAL NOT NULL,
     total       REAL DEFAULT 0,
-    start_date  DATE NOT NULL,
-    end_date    DATE NOT NULL,
+    start_date  TIMESTAMP NOT NULL,
+    end_date    TIMESTAMP NOT NULL,
     image       TEXT,
     is_pending  BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (owner_id) REFERENCES user_info(user_id)
@@ -26,6 +26,7 @@ CREATE TABLE campaign_contributor (
     campaign_id             INT NOT NULL,
     user_id                 INT NOT NULL,
     contribution            REAL NOT NULL,
+    is_live                 BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (campaign_id) REFERENCES campaign(campaign_id),
     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 );
