@@ -1,4 +1,4 @@
-CREATE TABLE [IF NOT EXISTS] [fundraising].user_info (
+CREATE TABLE user_info (
     user_id     INT PRIMARY KEY,
     first_name  TEXT NOT NULL,
     last_name   TEXT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE [IF NOT EXISTS] [fundraising].user_info (
     is_admin    BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE [IF NOT EXISTS] [fundraising].campaign (
+CREATE TABLE campaign (
     campaign_id INT PRIMARY KEY,
     owner_id    INT NOT NULL,
     title       TEXT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE [IF NOT EXISTS] [fundraising].campaign (
     FOREIGN KEY (owner_id) REFERENCES user_info(user_id)
 );
 
-CREATE TABLE [IF NOT EXISTS] [fundraising].campaign_contributor (
+CREATE TABLE campaign_contributor (
     campaign_contributor_id INT PRIMARY KEY,
     campaign_id             INT NOT NULL,
     user_id                 INT NOT NULL,
