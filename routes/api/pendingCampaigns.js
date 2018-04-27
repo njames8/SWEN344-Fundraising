@@ -1,9 +1,11 @@
 let express = require('express');
 let router = express.Router();
-let file = require("../../mock_data/pending_campaigns.json");
-/* GET home page. */
+
 router.get('/', function(req, res, next) {
-    res.json(file);
+    let db = new sqlite.Database("../../database/fundraising.db");
+    db.all("SELECT * FROM campaign WHERE is_pending = true", function(err, rows) {
+        res.json(rows);
+    });
 });
 
 module.exports = router;

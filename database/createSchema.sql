@@ -17,7 +17,6 @@ CREATE TABLE campaign (
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
     image       TEXT,
-    is_live     BOOLEAN DEFAULT FALSE,
     is_pending  BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (owner_id) REFERENCES user_info(user_id)
 );

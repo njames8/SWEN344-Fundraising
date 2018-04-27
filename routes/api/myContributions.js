@@ -1,9 +1,19 @@
 let express = require('express');
 let router = express.Router();
-let file = require("../../mock_data/my_contributions.json");
+const sqlite = require('sqlite3');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.json(file);
+    const userId = res.body.userId;
+    if (userId !== null) {
+        const db = new sqlite.Database("../../database/fundraising.db");
+        db.all("SELECT cp.*, cc.contribution FROM campaign_contributor cc " +
+            "INNER JOIN campaign cp ON cc.campaign_id = cp.campaign_id " +
+            "WHERE cc.user_id = $userId", userId, function(err, rows) {
+            res.json(rows);
+        });
+    } else {
+        res.sendStatus(400);
+    }
 });
 
 module.exports = router;
