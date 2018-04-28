@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
-let sqlite = require('sqlite3');
+const sqlite = require('sqlite3');
+const path = require('path');
 
 router.post('/', function(req, res, next) {
     let newObj = {
@@ -8,15 +9,19 @@ router.post('/', function(req, res, next) {
         $title: req.body.title,
         $description: req.body.description,
         $goal: req.body.goal,
-        $startDate: Date.parse(req.body.startDate),
-        $endDate: Date.parse(req.body.endDate),
-        $imageUrl: Date.parse(req.body.image)
+        $startDate: new Date(req.body.startDate),
+        $endDate: new Date(req.body.endDate),
+        $imageUrl: req.body.image
     };
 
-
-    let db = new sqlite.Database('../../database/fundraising.db');
-    db.exec("INSERT INTO campaign (owner_id, title, description, goal, total, start_date, end_date, image) " +
-        "VALUES ($userId, $title, $description, $goal, $startDate, $endDate, $imageUrl)", newObj);
+    let db = new sqlite.Database(path.resolve('database/fundraising.db'), sqlite.OPEN_READWRITE);
+    db.run("INSERT INTO campaign (ownerId, title, description, goal, startDate, endDate, image) " +
+        "VALUES ($userId, $title, $description, $goal, $startDate, $endDate, $imageUrl)", newObj, function(err) {
+        if (err) {
+            console.error(err);
+        }
+        db.close();
+    });
 
     res.sendStatus(200);
 });

@@ -16,6 +16,10 @@ let myContributions = require('./routes/api/myContributions');
 let createCampaign = require('./routes/api/createCampaign');
 let terminateCampaign = require('./routes/api/terminateCampaign');
 let cancelCampaign = require('./routes/api/cancelCampaign');
+let contribute = require('./routes/api/contribute');
+let approveCampaign = require('./routes/api/approveCampaign');
+let createUser = require('./routes/api/createUser');
+let addFunds = require('./routes/api/addFunds');
 
 let app = express();
 
@@ -26,7 +30,7 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -41,6 +45,10 @@ app.use('/api/myContributions', myContributions);
 app.use('/api/createCampaign', createCampaign);
 app.use('/api/terminateCampaign', terminateCampaign);
 app.use('/api/cancelCampaign', cancelCampaign);
+app.use('/api/contribute', contribute);
+app.use('/api/approveCampaign', approveCampaign);
+app.use('/api/createUser', createUser);
+app.use('/api/addFunds', addFunds);
 
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
@@ -64,7 +72,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render(__dirname  + '/error.html');
+  res.sendFile(__dirname  + '/public/error.html');
 });
 
 module.exports = app;

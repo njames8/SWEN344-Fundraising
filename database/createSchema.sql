@@ -1,32 +1,32 @@
 CREATE TABLE user_info (
-    user_id     INT PRIMARY KEY,
-    first_name  TEXT NOT NULL,
-    last_name   TEXT NOT NULL,
-    email       TEXT NOT NULL,
-    balance     REAL DEFAULT 0,
-    is_admin    BOOLEAN DEFAULT FALSE
+    userId     INTEGER PRIMARY KEY AUTOINCREMENT,
+    firstName  TEXT NOT NULL,
+    lastName   TEXT NOT NULL,
+    email       TEXT NOT NULL UNIQUE,
+    balance     REAL DEFAULT 0 NOT NULL,
+    isAdmin    BOOLEAN DEFAULT 0
 );
 
 CREATE TABLE campaign (
-    campaign_id INT PRIMARY KEY,
-    owner_id    INT NOT NULL,
+    campaignId INTEGER PRIMARY KEY AUTOINCREMENT,
+    ownerId    INTEGER NOT NULL,
     title       TEXT NOT NULL,
     description TEXT,
     goal        REAL NOT NULL,
-    total       REAL DEFAULT 0,
-    start_date  TIMESTAMP NOT NULL,
-    end_date    TIMESTAMP NOT NULL,
+    total       REAL DEFAULT 0 NOT NULL,
+    startDate  TIMESTAMP NOT NULL,
+    endDate    TIMESTAMP NOT NULL,
     image       TEXT,
-    is_pending  BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (owner_id) REFERENCES user_info(user_id)
+    isPending  BOOLEAN DEFAULT 1,
+    FOREIGN KEY (ownerId) REFERENCES userInfo(userId)
 );
 
 CREATE TABLE campaign_contributor (
-    campaign_contributor_id INT PRIMARY KEY,
-    campaign_id             INT NOT NULL,
-    user_id                 INT NOT NULL,
+    campaignContributorId INTEGER PRIMARY KEY AUTOINCREMENT,
+    campaignId             INTEGER NOT NULL,
+    userId                 INTEGER NOT NULL,
     contribution            REAL NOT NULL,
-    is_live                 BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (campaign_id) REFERENCES campaign(campaign_id),
-    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
+    isLive                 BOOLEAN DEFAULT 1,
+    FOREIGN KEY (campaignId) REFERENCES campaign(campaignId),
+    FOREIGN KEY (userId) REFERENCES user_info(userId)
 );

@@ -1,12 +1,14 @@
 let express = require('express');
 let router = express.Router();
-let sqlite = require('sqlite3');
+const sqlite = require('sqlite3');
+const path = require('path');
 
 router.get('/', function(req, res, next) {
-    const campaignId = res.body.campaignId;
-    if (campaignId !== null) {
-        const db = new sqlite.Database('../../database/fundraising.db');
-        db.exec("UPDATE campaign SET end_date = CURRENT_TIMESTAMP WHERE campaign_id = ?", campaignId, function(err, obj) {
+    const campaignId = req.query.campaignId;
+    if (campaignId) {
+        const db = new sqlite.Database(path.resolve('database/fundraising.db'), sqlite.OPEN_READWRITE);
+        const now = Date.now();
+        db.run("UPDATE campaign SET endDate = ?1 WHERE campaignId = ?2 AND endDate > ?1", [now, campaignId], function(err, obj) {
             if (err) {
                 console.error(err);
             }

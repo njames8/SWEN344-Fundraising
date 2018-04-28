@@ -1,28 +1,32 @@
 let express = require('express');
 let router = express.Router();
 const sqlite = require('sqlite3');
+const path = require('path');
 
 router.get('/', function(req, res, next) {
-    const campaignId = res.body['campaignId'];
-    if (campaignId !== null) {
-        const db = new sqlite.Database('../../database/fundraising.db');
+    const campaignId = req.query.campaignId;
+    if (campaignId) {
+        const db = new sqlite.Database(path.resolve('database/fundraising.db'), sqlite.OPEN_READWRITE);
         const stmt = db.prepare(
             "UPDATE user_info SET balance = " +
-            "(SELECT balance FROM user_info WHERE user_id = $userId) + " +
-            "(SELECT SUM(contribution) FROM campaign_contributor WHERE campaign_id = $campaignId AND user_id = $userId GROUP BY user_id); " +
-            "UPDATE campaign_contributor SET is_live = FALSE WHERE campaign_id = $campaignId AND user_id = $userId; "
+            "balance + " +
+            "(SELECT SUM(contribution) FROM campaign_contributor WHERE campaignId = $campaignId AND userId = $userId AND isLive=1 GROUP BY userId) " +
+            "WHERE userId = $userId; "
         );
-        db.each("SELECT user_id FROM campaign_contributor WHERE campaign_id = ?", campaignId, function(err, row) {
+        const stmt2 = db.prepare("UPDATE campaign_contributor SET isLive = 0 WHERE campaignId = $campaignId AND userId = $userId; ");
+        db.each("SELECT userId FROM campaign_contributor WHERE campaignId = ?", campaignId, function(err, row) {
             if (err) {
                 console.error(err);
             }
             const params = {
-                $userId: row,
+                $userId: row.userId,
                 $campaignId: campaignId
             };
-            stmt.run(params)
+            stmt.run(params);
+            stmt2.run(params);
         });
-        db.exec("UPDATE campaign SET end_date = CURRENT_TIMESTAMP WHERE campaign_id = ?", campaignId);
+        const now = Date.now();
+        db.run("UPDATE campaign SET endDate = ?1, total = 0.0 WHERE campaignId = ?2", [now,campaignId]);
         res.sendStatus(200);
     }
 });
