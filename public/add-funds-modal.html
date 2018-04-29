@@ -13,19 +13,19 @@
                         <div class="form-group">
                             <label class="form-control-label">Amount</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" min="0" step="0.01" aria-label="Text input with segmented dropdown button">
+                                <input type="number" class="form-control" id="addAmount" min="0" step="0.01" aria-label="Text input with segmented dropdown button">
                                 <div class="input-group-append">
                                     <div class="input-group-text currencyOptionIcon"><i class="fa fa-usd" aria-hidden="true"></i></div>
                                     <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
-                                    <div class="dropdown-menu currencyOptions">
-                                        <a class="dropdown-item" id="usdOption" data-type="usd" href="#">USD</a>
-                                        <a class="dropdown-item" id="eurOption" data-type="eur" href="#">Euro</a>
-                                        <a class="dropdown-item" id="gpbOption" data-type="gbp" href="#">GBP</a>
-                                        <a class="dropdown-item" id="inrOption" data-type="inr" href="#">INR</a>
-                                        <a class="dropdown-item" id="cadOption" data-type="usd" href="#">CAD</a>
-                                        <a class="dropdown-item" id="btcOption" data-type="btc" href="#">BTC</a>
+                                    <div class="dropdown-menu currencyOptions" id="currencyOption">
+                                        <a class="dropdown-item active" id="usdOption" data-type="USD" href="#">USD</a>
+                                        <a class="dropdown-item" id="eurOption" data-type="EUR" href="#">Euro</a>
+                                        <a class="dropdown-item" id="gpbOption" data-type="GBP" href="#">GBP</a>
+                                        <a class="dropdown-item" id="inrOption" data-type="INR" href="#">INR</a>
+                                        <a class="dropdown-item" id="cadOption" data-type="USD" href="#">CAD</a>
+                                        <a class="dropdown-item" id="btcOption" data-type="BTC" href="#">BTC</a>
                                     </div>
                                 </div>
                             </div>

@@ -3,15 +3,19 @@
         <div class="jumbotron">
             <form id="updateAccountInfoForm">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="email" class="form-control" id="accountName" value="Name">
+                    <label>First Name</label>
+                    <input type="email" class="form-control" id="accountFirstName" value="First Name">
                 </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="email" class="form-control" id="accountLastName" value="Last Name">
+                </div>                
                 <div class="form-group">
                     <label>Email address</label>
                     <input type="email" class="form-control" id="accountEmail" value="Email">
                 </div>
                 <div class="form-group">
-                    <label>Account Balance</label>
+                    <label>Account Balance ($)</label>
                     <input class="form-control" id="accountBalance" type="text" placeholder="XXXX" readonly>
                 </div>
                 <button type="button" class="btn btn-primary" id="addFundsButton">Add Funds</button>
@@ -30,19 +34,52 @@
 
         connectedCallback() {
             var that = this;
-            fetch(`/api/userInfo`)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    that.updateAccount(JSON.parse(responseText));
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            $.ajax({
+                url: '/api/userInfo',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    email: "thestranger@gmail.com",
+                }
+                }).done(function (response) {
+                    that.updateAccount(response);
+            });                
         }
 
         addFundsCall(event) {
-            // stubbed functionality
             console.log("Added Funds");
+
+            var from = event.target.querySelector("#currencyOption .active").dataset.type;
+            var to = "USD";
+            var value = event.target.querySelector("#addAmount").value;
+
+            var that = this;
+                $.ajax({
+                url: 'https://openexchangerates.org/api/latest.json',
+                type: 'GET',
+                dataType: 'json',
+                context: {
+                    from: from,
+                    value: value
+                },
+                data: {
+                    app_id: "e19b9459352a487ba830e89028cd59a3",
+                }
+                }).done(function (response) {
+                    var amount = response.rates[this.from] * this.value;
+
+                    $.ajax({
+                        url: '/api/addFunds',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            userId: 3,
+                            amount: amount
+                        }
+                        }).done(function (response) {
+                    });
+            });
+
             $("#addFundsModal").modal("hide");
         }
 
@@ -53,7 +90,7 @@
 
         changeCurrencyIcon(event) {
             const currencyIcon = document.querySelector(".currencyOptionIcon i");
-            currencyIcon.className = "fa fa-" + this.dataset.type;
+            currencyIcon.className = "fa fa-" + this.dataset.type.toLocaleLowerCase();
             $(this.parentElement.children).removeClass("active");
             $(this).addClass("active");
         }
@@ -90,7 +127,8 @@
             updateAccountInfoForm.addEventListener("submit", self.updateAccountInfoCall);
 
             // Set form values
-            $("my-account #accountName").attr('value', response.name);
+            $("my-account #accountFirstName").attr('value', response.firstName);
+            $("my-account #accountLastName").attr('value', response.lastName);
             $("my-account #accountEmail").attr('value', response.email);
             $("my-account #accountBalance").attr('placeholder',response.balance);
         }

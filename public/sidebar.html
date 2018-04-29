@@ -4,9 +4,9 @@
             <div class="user-pic">
                 <i class="fa fa-user-circle-o" aria-hidden="true"></i>
             </div>
-            <ul class="nav flex-column">
+            <ul class="nav flex-column" id="sidebar-list">
                 <li class="nav-item">
-                    <a class="nav-link active" href="index.html">
+                    <a class="nav-link" href="index.html">
                         <i class="fa fa-home" aria-hidden="true" style=""></i>
                         Dashboard
                     </a>
@@ -34,6 +34,15 @@
     </nav>
 </template>
 
+<template id="admin-template">
+    <li class="nav-item">
+        <a class="nav-link" href="pending-campaigns.html">
+            <i class="fa fa-bars" aria-hidden="true" style=""></i>
+            Pending Campaigns
+        </a>
+    </li>
+</template>
+
 <script>
     var doc = document.currentScript.ownerDocument;
     class Sidebar extends HTMLElement {
@@ -43,14 +52,26 @@
 
         connectedCallback() {
             var that = this;
-            fetch(`/api/userInfo`)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    that.updateBalance(JSON.parse(responseText));
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            $.ajax({
+            url: '/api/userInfo',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                email: "thestranger@gmail.com",
+            }
+            }).done(function (response) {
+                that.updateBalance(response);
+                window.userId = response.userId;
+                if  (response.isAdmin === 1) {
+                    that.addAdminFunctionality();
+                }
+            });
+        }
+
+        addAdminFunctionality() {
+            const temp = doc.querySelector("#admin-template");
+            const instance = temp.content.cloneNode(true);
+            document.querySelector("#sidebar-list").appendChild(instance);
         }
 
         updateBalance(response) {

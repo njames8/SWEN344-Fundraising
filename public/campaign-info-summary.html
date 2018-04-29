@@ -1,0 +1,69 @@
+<template id="campaign-info-template">
+    <div class="campaign">
+        <div class="card-block campaign-block">
+            <div class="row">
+                <div class="col-3 campaignImage">
+                    <img src="" height="120px">
+                </div>
+                <div class="col-5 campaignInfo">
+                    <a class="card-title campaignTitle" href=""></a>
+                    <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
+                    <p class="card-text campaignDescription"></p>
+                </div>
+                <div class="col-3 campaignGoal">
+                    <h5 class="card-title campaignGoalAmount"></h5>
+                    <div class="campaignGoalBar">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    var importedDoc = document.currentScript.ownerDocument;
+    class CampaignInfo extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            var that = this;
+            $.ajax({
+                url: '/api/campaigns',
+                type: 'GET',
+                dataType: 'json',
+                }).done(function (response) {
+                    for (var campaign of response) {
+                        if (campaign.campaignId === 1) {
+                            that.createCampaign(campaign)
+                        }
+                    }
+                }
+            );    
+        }
+
+        createCampaign(campaign) {
+            const t = importedDoc.querySelector('#campaign-info-template');
+            const instance = t.content.cloneNode(true);
+
+            instance.querySelector(".campaignImage img").src = campaign.image;
+            instance.querySelector(".campaignTitle").innerHTML = campaign.title;
+            instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
+            instance.querySelector(".campaignDescription").innerHTML = campaign.description;
+            instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
+
+            var percentage = (campaign.total / campaign.goal) * 100 + "%";
+
+            instance.querySelector(".campaignGoalBar .progress-bar").style.width = percentage;
+
+            const campaignInfoButton = instance.querySelector(".campaignTitle");
+
+            campaignInfoButton.addEventListener("click", self.campaignInfo);
+
+            this.appendChild(instance);
+        }
+    }
+    customElements.define('campaign-info', CampaignInfo);
+</script>

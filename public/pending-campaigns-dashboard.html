@@ -12,9 +12,8 @@
                 </div>
                 <div class="col-3 campaignGoal">
                     <h5 class="card-title campaignGoalAmount"></h5>
-                    <div class="campaignGoalBar">
-                        <div class="progress-bar"></div>
-                    </div>
+                    <button type="button" class="btn btn-success" id="approveCampaign">Approve</button>
+                    <button type="button" class="btn btn-danger" id="terminateCampaign">Terminate</button>
                 </div>
             </div>
         </div>
@@ -23,7 +22,7 @@
 
 <script>
     var importedDoc = document.currentScript.ownerDocument;
-    class Dashboard extends HTMLElement {
+    class PendingCampaignsDashboard extends HTMLElement {
         constructor() {
             super();
         }
@@ -31,13 +30,39 @@
         connectedCallback() {
             var that = this;
             $.ajax({
-                url: '/api/campaigns',
+                url: '/api/pendingCampaigns',
                 type: 'GET',
                 dataType: 'json',
                 }).done(function (response) {
                     that.createCampaigns(response)
                 }
             );    
+        }
+
+        approveCampaign(event) {
+            var that = this;
+            let campaignId = $(event.target.parentElement).data("id");
+            $.ajax({
+                url: '/api/approveCampaign',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    campaignId: campaignId,
+                },                
+            }); 
+        }
+
+        terminateCampaign(event) {
+            var that = this;
+            let campaignId = $(event.target.parentElement).data("id");
+            $.ajax({
+                url: '/api/terminateCampaign',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    campaignId: campaignId,
+                }
+            }); 
         }
 
         createCampaigns(response) {
@@ -49,20 +74,24 @@
                 instance.querySelector(".campaignTitle").innerHTML = campaign.title;
                 instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
                 instance.querySelector(".campaignDescription").innerHTML = campaign.description;
-                instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
+                instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.goal + " goal";
 
-                var percentage = (campaign.total / campaign.goal) * 100 + "%";
+                let campaignGoal = instance.querySelector(".campaignGoal");
 
-                instance.querySelector(".campaignGoalBar .progress-bar").style.width = percentage;
+                $(campaignGoal).data("id", campaign.campaignId);
 
-                const campaignInfoButton = instance.querySelector(".campaignTitle");
+                const approveCampaign = instance.querySelector("#approveCampaign");
+                approveCampaign.addEventListener("click", this.approveCampaign);
 
-                campaignInfoButton.addEventListener("click", self.campaignInfo);
+                const terminateCampaign = instance.querySelector("#terminateCampaign");
+                terminateCampaign.addEventListener("click", this.terminateCampaign);  
 
                 this.appendChild(instance);
+
+              
             }
             console.log(response);
         }
     }
-    customElements.define('my-dashboard', Dashboard);
+    customElements.define('pending-campaign-dashboard', PendingCampaignsDashboard);
 </script>

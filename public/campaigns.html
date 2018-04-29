@@ -32,14 +32,17 @@
 
         connectedCallback() {
             var that = this;
-            fetch(`/api/myCampaigns`)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    that.updateAccount(JSON.parse(responseText));
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            $.ajax({
+                url: '/api/myCampaigns',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    userId: 1,
+                }                
+                }).done(function (response) {
+                    that.updateAccount(response)
+                }
+            );
         }
 
         cancelCampaignCall(event) {
