@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
         const now = Date.now();
         db.run("UPDATE campaign SET endDate = ?1, total = 0.0 WHERE campaignId = ?2", [now,campaignId]);
         res.sendStatus(200);
-    }
+    } else res.sendStatus(400);
 });
 
 module.exports = router;

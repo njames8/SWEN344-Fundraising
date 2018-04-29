@@ -9,8 +9,8 @@ router.post('/', function(req, res, next) {
         $title: req.body.title,
         $description: req.body.description,
         $goal: req.body.goal,
-        $startDate: new Date(req.body.startDate),
-        $endDate: new Date(req.body.endDate),
+        $startDate: req.body.startDate,
+        $endDate: req.body.endDate,
         $imageUrl: req.body.image
     };
 

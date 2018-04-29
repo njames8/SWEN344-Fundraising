@@ -2,11 +2,30 @@ const app = require('../app');
 const chai = require('chai');
 const expect = chai.expect;
 const http = require('http');
+const sqlite = require('sqlite3');
+const path = require('path');
+const createDb = require('./setupDb');
+const testData = require('./testdata');
 
 chai.use(require('chai-http'));
 
 const server = http.createServer(app);
 const request = chai.request(server);
+before(function() {
+    const db = new sqlite.Database(path.resolve('database/fundraising.db'));
+    db.serialize(function() {
+        createDb(db);
+        db.serialize(function(){
+            db.run("DELETE FROM campaign");
+            db.run("DELETE FROM user_info");
+            db.run("DELETE FROM campaign_contributor");
+            db.run("INSERT INTO campaign (ownerId, title, description, goal, total, startDate, endDate, image) " +
+                "VALUES ($ownerId, $title, $description, $goal, $total, $startDate, $endDate, $image)", testData.campaigns[0]);
+            db.run("INSERT INTO user_info (firstName, lastName, email, balance) VALUES ($firstName, $lastName, $email, $balance)", testData.users[0]);
+            db.run("INSERT INTO campaign_contributor (campaignId, userId, contribution) VALUES ($campaignId, $userId, $contribution)", testData.campaignContributors[0]);
+        });
+    });
+});
 after(done => server.close(done));
 describe("GET Campaigns", function () {
     this.timeout(5000);
