@@ -6,7 +6,7 @@
                     <img src="" height="120px">
                 </div>
                 <div class="col-5 campaignInfo">
-                    <h3 class="card-title campaignTitle"></h3>
+                    <h3><a class="card-title campaignTitle" href=""></a></h3>
                     <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
                     <p class="card-text campaignDescription"></p>
                 </div>
@@ -47,6 +47,7 @@
 
                 instance.querySelector(".campaignImage img").src = campaign.image;
                 instance.querySelector(".campaignTitle").innerHTML = campaign.title;
+                instance.querySelector(".campaignTitle").href = "/campaigns/" +  campaign.campaignId;
                 instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
                 instance.querySelector(".campaignDescription").innerHTML = campaign.description;
                 instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";

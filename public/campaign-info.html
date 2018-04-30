@@ -1,23 +1,18 @@
 <template id="campaign-info-template">
-    <div class="campaign">
-        <div class="card-block campaign-block">
-            <div class="row">
-                <div class="col-3 campaignImage">
-                    <img src="" height="120px">
-                </div>
-                <div class="col-5 campaignInfo">
+    <h1 class="title">RIT Fundraising</h1>
+    <div class="campaignImage pl-5" style="width: 300px;">
+        <img src="" height="120px" width="300px">
+    </div>
+    <div class="campaignInfo pl-5 pt-3">
                     <a class="card-title campaignTitle" href=""></a>
                     <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
                     <p class="card-text campaignDescription"></p>
-                </div>
-                <div class="col-3 campaignGoal">
-                    <h5 class="card-title campaignGoalAmount"></h5>
-                    <div class="campaignGoalBar">
-                        <div class="progress-bar"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="campaignGoal pl-5">
+        <h5 class="card-title campaignGoalAmount"></h5>
+        <div class="campaignGoalBar">
+            <div class="progress-bar"></div>
+    </div>
     </div>
 </template>
 
@@ -35,8 +30,10 @@
                 type: 'GET',
                 dataType: 'json',
                 }).done(function (response) {
+                    let url = window.location.pathname.split('/');
+                    let campaignId =  Number(url.pop());
                     for (var campaign of response) {
-                        if (campaign.campaignId === 1) {
+                        if (campaign.campaignId === campaignId) {
                             that.createCampaign(campaign)
                         }
                     }
@@ -49,7 +46,7 @@
             const instance = t.content.cloneNode(true);
 
             instance.querySelector(".campaignImage img").src = campaign.image;
-            instance.querySelector(".campaignTitle").innerHTML = campaign.title;
+            instance.querySelector(".title").innerHTML = campaign.title;
             instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
             instance.querySelector(".campaignDescription").innerHTML = campaign.description;
             instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
