@@ -7,7 +7,7 @@ let bodyParser = require('body-parser');
 
 let index = require('./routes/index');
 let account = require('./routes/account');
-let myCampaignsPage = require('./routes/myCampaignsPage')
+let myCampaignsPage = require('./routes/myCampaignsPage');
 let campaigns = require('./routes/api/campaigns');
 let pendingCampaigns = require('./routes/api/pendingCampaigns');
 let userInfo = require('./routes/api/userInfo');
@@ -20,6 +20,7 @@ let contribute = require('./routes/api/contribute');
 let approveCampaign = require('./routes/api/approveCampaign');
 let createUser = require('./routes/api/createUser');
 let addFunds = require('./routes/api/addFunds');
+let campaignInfo = require('./routes/campaignInfo');
 
 let app = express();
 
@@ -36,7 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/account', account);
-app.use('/my-campaigns', myCampaignsPage)
+app.use('/my-campaigns', myCampaignsPage);
+app.use('/campaigns', campaignInfo);
 app.use('/api/campaigns', campaigns);
 app.use('/api/userInfo', userInfo);
 app.use('/api/pendingCampaigns', pendingCampaigns);
