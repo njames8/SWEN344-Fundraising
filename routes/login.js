@@ -1,9 +1,9 @@
 let express = require('express');
 let router = express.Router();
-let path = require('path');
+const path = require('path');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.sendFile(path.resolve('public/index.html'));
+    res.sendFile(path.resolve('public/login.html'));
 });
 
 module.exports = router;

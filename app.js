@@ -5,6 +5,7 @@ let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 
+let login = require('./routes/login');
 let index = require('./routes/index');
 let account = require('./routes/account');
 let myCampaignsPage = require('./routes/myCampaignsPage');
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/dash', login);
 app.use('/account', account);
 app.use('/my-campaigns', myCampaignsPage);
 app.use('/campaigns', campaignInfo);
