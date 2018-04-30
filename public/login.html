@@ -4,40 +4,30 @@
     <meta charset="UTF-8">
     <title>RIT Fundraising</title>
     <script src="/jquery/jquery.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-    <meta name="google-signin-client_id" content="964908988627-16q77lvu98qefm8596fmdgm1urv4qdga.apps.googleusercontent.com">
+    <link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
+    <link rel="import" href="/dashboard.html">
+    <link rel="import" href="/create-campaign-modal.html">
+    <link rel="import" href="/sidebar.html">
 </head>
 <body>
-Login: 
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
-<script type="text/javascript">
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-      var loginPromise = new Promise((resolve, reject) => {
-            $.ajax({
-                url: '/api/userInfo',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    email: profile.getEmail(),
-                }
-                }).done(function (response) {
-                    resolve(response);
-            });
-        });
-
-        loginPromise.then((values) => {
-            let temp = 0;
-        });
-
-    }
-</script>
+<div class="container-fluid">
+    <div class="row">
+        <my-sidebar></my-sidebar>
+        <div class="content">
+            <h1 class="title">RIT Fundraising</h1>
+            <my-dashboard>
+            </my-dashboard>
+        </div>
+        <create-campaign-modal></create-campaign-modal>
+        <div id="createCampaignButton"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+    </div>
+</div>
+<script src="/tether/js/tether.min.js"></script>
+<script src="/popper/popper.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 </body>
 </html>

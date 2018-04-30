@@ -10,15 +10,59 @@
     <meta name="google-signin-client_id" content="964908988627-16q77lvu98qefm8596fmdgm1urv4qdga.apps.googleusercontent.com">
 </head>
 <body>
-Login: 
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<div class="jumbotron" style="background: #F36E21">
+  <h1 class="display-4">RIT Fundraising</h1>
+  <hr class="my-4">
+  <p>Please login below:</p>
+  <p class="lead">
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  </p>
+</div>
 <script type="text/javascript">
     function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+      var name = profile.getName().split(" ");
+      var imageUrl = profile.getImageUrl();
+      var email = profile.getEmail();
+
+      var loginPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/api/userInfo',
+                type: 'GET',
+                dataType: 'json',
+                context: {
+                    firstName: name[0],
+                    lastName: name[1],
+                    imageUrl: imageUrl,
+                    email: email
+                },                
+                data: {
+                    email: profile.getEmail(),
+                }
+                }).done(function (response) {
+                    if (response === null) {
+                        $.ajax({
+                            url: '/api/createUser',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                firstName: this.firstName,
+                                lastName: this.lastName,
+                                email: this.email,
+                            }
+                            }).done(function (response) {
+                                resolve(response);
+                        });
+                    } else {
+                        resolve(response);    
+                    }
+            });
+        });
+
+        loginPromise.then((values) => {
+            window.location.href = "http://localhost:3000/login.html";
+        });
+
     }
 </script>
 </body>
