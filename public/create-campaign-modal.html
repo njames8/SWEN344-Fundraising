@@ -83,8 +83,8 @@
             var title = event.target.querySelector("#campaign-title").value;
             var desc = event.target.querySelector("#campaign-description").value;
             var goal = event.target.querySelector("#campaign-goal").value;
-            var startDate = event.target.querySelector("#campaign-start-date").value;
-            var endDate = event.target.querySelector("#campaign-end-date").value;
+            var startDate = new Date(event.target.querySelector("#campaign-start-date").value);
+            var endDate = new Date(event.target.querySelector("#campaign-end-date").value);
             var image = event.target.querySelector("#campaign-image").value;
 
             $.ajax({
@@ -96,8 +96,8 @@
                     title: title,
                     description: desc,
                     goal: goal,
-                    startDate: startDate,
-                    endDate: endDate,
+                    startDate: startDate.getTime(),
+                    endDate: endDate.getTime(),
                     image: image
                 }
                 }).done(function (response) {

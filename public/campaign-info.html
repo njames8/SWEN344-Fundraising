@@ -4,15 +4,40 @@
         <img src="" height="120px" width="300px">
     </div>
     <div class="campaignInfo pl-5 pt-3">
-                    <a class="card-title campaignTitle" href=""></a>
-                    <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
-                    <p class="card-text campaignDescription"></p>
+        <a class="card-title campaignTitle" href=""></a>
+        <h6 class="card-subtitle mb-2 text-muted campaignOwner"></h6>
+        <p class="card-text campaignDescription"></p>
+    </div>
+    <div class="campaignTime pl-5 pt-2">
+        <p class="card-text campaignTimes"></p>
     </div>
     <div class="campaignGoal pl-5">
         <h5 class="card-title campaignGoalAmount"></h5>
         <div class="campaignGoalBar">
             <div class="progress-bar"></div>
+        </div>
     </div>
+    <div class="pl-5">
+        <div class="form-group">
+            <label class="form-control-label">Amount</label>
+            <div class="input-group" style="width: 300px;">
+                <input type="number" class="form-control" id="addAmount" min="0" step="0.01" aria-label="Text input with segmented dropdown button">
+                <div class="input-group-append">
+                    <div class="input-group-text currencyOptionIcon"><i class="fa fa-usd" aria-hidden="true"></i></div>
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu currencyOptions" id="currencyOption">
+                        <a class="dropdown-item active" id="usdOption" data-type="USD" href="#">USD</a>
+                        <a class="dropdown-item" id="eurOption" data-type="EUR" href="#">Euro</a>
+                        <a class="dropdown-item" id="gpbOption" data-type="GBP" href="#">GBP</a>
+                        <a class="dropdown-item" id="inrOption" data-type="INR" href="#">INR</a>
+                        <a class="dropdown-item" id="cadOption" data-type="USD" href="#">CAD</a>
+                        <a class="dropdown-item" id="btcOption" data-type="BTC" href="#">BTC</a>
+                    </div>
+                </div>
+            </div>
+        <button type="button" class="btn btn-success mt-2" id="donateButton">Donate</button>
     </div>
 </template>
 
@@ -34,20 +59,54 @@
                     let campaignId =  Number(url.pop());
                     for (var campaign of response) {
                         if (campaign.campaignId === campaignId) {
-                            that.createCampaign(campaign)
+                            that.createCampaign(campaign, campaignId)
                         }
                     }
                 }
             );    
         }
 
-        createCampaign(campaign) {
+        donate(event, campaignId) {
+            var from = event.target.parentElement.querySelector(".currencyOptions .active").dataset.type;
+            var value = event.target.parentElement.querySelector("#addAmount").value;
+
+            var that = this;
+                $.ajax({
+                url: 'https://openexchangerates.org/api/latest.json',
+                type: 'GET',
+                dataType: 'json',
+                context: {
+                    from: from,
+                    value: value
+                },
+                data: {
+                    app_id: "e19b9459352a487ba830e89028cd59a3",
+                }
+                }).done(function (response) {
+                    var amount = response.rates[this.from] * this.value;
+
+                    $.ajax({
+                        url: '/api/contribute',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            userId: 3,
+                            campaignId: campaignId,
+                            amount: amount
+                        }
+                        }).done(function (response) {
+                            location.reload();
+                    });
+            });
+        }
+
+        createCampaign(campaign, campaignId) {
             const t = importedDoc.querySelector('#campaign-info-template');
             const instance = t.content.cloneNode(true);
 
             instance.querySelector(".campaignImage img").src = campaign.image;
             instance.querySelector(".title").innerHTML = campaign.title;
-            instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
+            instance.querySelector(".campaignOwner").innerHTML = campaign.firstName + " " + campaign.lastName;
             instance.querySelector(".campaignDescription").innerHTML = campaign.description;
             instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
 
@@ -55,9 +114,14 @@
 
             instance.querySelector(".campaignGoalBar .progress-bar").style.width = percentage;
 
-            const campaignInfoButton = instance.querySelector(".campaignTitle");
+            var startDate = new Date(campaign.startDate);
+            var endDate = new Date(campaign.endDate);
 
-            campaignInfoButton.addEventListener("click", self.campaignInfo);
+            instance.querySelector(".campaignTimes").innerHTML = "Campaign Dates: " + startDate.toDateString() + " - " + endDate.toDateString();
+
+            const donateButton = instance.querySelector("#donateButton");
+            //donateButton.addEventListener("click", this.donate, campaign.campaignId);
+            donateButton.addEventListener("click", () => { this.donate(event, campaign.campaignId); }, false)
 
             this.appendChild(instance);
         }

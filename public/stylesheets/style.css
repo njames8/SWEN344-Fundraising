@@ -115,3 +115,7 @@ a {
 #addCampaignForm {
     font-size: 18px;
 }
+
+.card-text {
+  font-size: 20px;
+}

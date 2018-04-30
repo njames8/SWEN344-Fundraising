@@ -48,7 +48,7 @@
                 instance.querySelector(".campaignImage img").src = campaign.image;
                 instance.querySelector(".campaignTitle").innerHTML = campaign.title;
                 instance.querySelector(".campaignTitle").href = "/campaigns/" +  campaign.campaignId;
-                instance.querySelector(".campaignOwner").innerHTML = campaign.owner;
+                instance.querySelector(".campaignOwner").innerHTML = campaign.firstName + " " + campaign.lastName;
                 instance.querySelector(".campaignDescription").innerHTML = campaign.description;
                 instance.querySelector(".campaignGoalAmount").innerHTML = "$" + campaign.total + " of $" + campaign.goal + " goal";
 
